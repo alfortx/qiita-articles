@@ -2,12 +2,12 @@
 title: '東京リージョンから出られない貴方へ ~ Snowflake Intelligence を使わない Snowflake Intelligence  '
 tags:
   - Snowflake
-  - CortexAnalyst
   - ClaudeCode
   - SnowflakeIntelligence
+  - CortexAnalyst
 private: false
-updated_at: ''
-id: null
+updated_at: '2026-03-22T19:14:39+09:00'
+id: 03a8702c7fb23e6ce4c9
 organization_url_name: null
 slide: false
 ignorePublish: false
@@ -204,7 +204,6 @@ Semantic View の指定
 
 プロジェクトのスラッシュコマンド `.claude/commands/analyst.md` に以下の指示を書いておくことで、`/analyst <質問>` と打つだけで自動的に Cortex Analyst を呼び出し、結果を解釈して回答してくれます。
 
-```markdown
 ## 実行手順
 
 1. Cortex Analyst を呼び出す
@@ -216,7 +215,7 @@ Semantic View の指定
    ```
 2. 結果を評価し、不十分なら追加クエリ（最大3回）
 3. 最終回答を日本語で合成
-```
+
 
 ### 5. `.claude/settings.local.json` でコマンド確認をスキップ
 
