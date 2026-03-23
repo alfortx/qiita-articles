@@ -6,7 +6,7 @@ tags:
   - SnowflakeIntelligence
   - CortexAnalyst
 private: false
-updated_at: '2026-03-22T19:14:39+09:00'
+updated_at: '2026-03-22T19:18:15+09:00'
 id: 03a8702c7fb23e6ce4c9
 organization_url_name: null
 slide: false
@@ -16,7 +16,7 @@ ignorePublish: false
 ## TL;DR
 
 - Snowflake Intelligence はリージョン制約（Claude モデル使用）で日本リージョンでは利用不可。またはクロスリージョン推論設定の有効化が必要だが社内セキュリティ基準的にNGの場合あり。
-- 自前のClaude からSnowflake Cortexを呼び出して擬似Snowflake Intelligenceを実現できないかやってみた。
+- 私用環境にて、自前のClaude からSnowflake Cortexを呼び出して擬似Snowflake Intelligenceを実現できないかやってみた。
 - 本取組みは、Snowflake内のデータをClaudeに見せている点ではSnowflake Intelligence と変わらないため、**本質的な解決にはなっていません**が、Intelligence の勉強になったため投稿いたしました。
 
 
@@ -235,43 +235,75 @@ Semantic View の指定
 
 実際に `/analyst` コマンドで日本のデータを分析した例を紹介します。
 
-### 日本の月別新規感染者数の推移
+### 日本の月別感染者数（累積）の推移
 
 ```
 /analyst 日本の月別感染者数の推移を教えてください
 ```
 
-| 月 | 新規感染者数 |
-|---|---|
-| 2020年1月 | 13人 |
-| 2020年4月 | 12,029人（第1波） |
-| 2020年8月 | 32,129人（第2波） |
-| 2021年1月 | 154,991人（第3波） |
-| 2021年5月 | 153,716人（第4波） |
-| 2021年8月 | **567,768人（第5波・最多）** |
-| 2021年11月 | 2,036人（収束） |
+#### 1回目：空結果
 
-### 日本のワクチン接種完了者数の推移
-
-```
-/analyst 日本のワクチン接種者の推移は？
+```bash
+venv/bin/python scripts/cortex_analyst.py \
+  --question "日本の月別感染者数の推移を教えてください" \
+  --model COVID19_SEMANTIC \
+  --execute
 ```
 
-| 月 | 2回接種完了者数（累計） |
-|---|---|
-| 2021年3月 | 125,580人 |
-| 2021年6月 | 17,741,382人 |
-| 2021年8月 | 58,508,479人 |
-| 2021年10月 | 91,229,398人 |
-| 2021年11月 | **94,589,255人（約75%）** |
+```json
+{
+  "question": "日本の月別感染者数の推移を教えてください",
+  "analyst_text": "日本の月別累計感染者数の推移を、利用可能な全期間にわたって教えてください。月ごとの最大累計感染者数を月別感染者数として集計します。",
+  "sql": "SELECT DATE_TRUNC('MONTH', date) AS month, MAX(confirmed) AS monthly_confirmed FROM RAW_DB.COVID19.MV_JHU_TIMESERIES WHERE country_region = 'Japan' AND province_state IS NULL GROUP BY DATE_TRUNC('MONTH', date) ORDER BY month DESC;",
+  "results": [],
+  "row_count": 0
+}
+```
 
-6〜8月に月2,000万人規模で急増し、第5波（デルタ株）が収束した9月以降に接種ペースが鈍化しています。
+Cortex Analyst は `province_state IS NULL`（国全体）に絞った SQL を生成しましたが、該当レコードが存在せず空結果になりました。
 
-Claude Code が Cortex Analyst を呼び出し、必要に応じて追加クエリしながら日本語で回答を合成しています。
+#### 2回目：英語で再質問 → 成功
+
+Claude Code は結果が不十分と判断し、質問を英語に変えて再クエリしました。
+
+```bash
+venv/bin/python scripts/cortex_analyst.py \
+  --question "Japan monthly COVID-19 confirmed cases trend" \
+  --model COVID19_SEMANTIC \
+  --execute
+```
+
+```json
+{
+  "question": "Japan monthly COVID-19 confirmed cases trend",
+  "analyst_text": "Show Japan's monthly COVID-19 confirmed cases trend over the entire available time period, aggregated by month.",
+  "sql": "SELECT DATE_TRUNC('MONTH', date) AS month, SUM(confirmed) AS monthly_confirmed FROM RAW_DB.COVID19.MV_JHU_TIMESERIES WHERE country_region = 'Japan' GROUP BY DATE_TRUNC('MONTH', date) ORDER BY month DESC;",
+  "results": [
+    { "MONTH": "2020-05-01", "MONTHLY_CONFIRMED": 462726 },
+    { "MONTH": "2020-04-01", "MONTHLY_CONFIRMED": 252141 },
+    { "MONTH": "2020-03-01", "MONTHLY_CONFIRMED": 28042 },
+    { "MONTH": "2020-02-01", "MONTHLY_CONFIRMED": 2334 },
+    { "MONTH": "2020-01-01", "MONTHLY_CONFIRMED": 56 }
+  ],
+  "row_count": 5
+}
+```
+
+`province_state` の絞り込みなしで SQL が生成され、5件のデータが取得できました。
+
+| 月 | 累積感染者数 | 前月比増加数 |
+|---|---|---|
+| 2020年1月 | 56人 | — |
+| 2020年2月 | 2,334人 | +2,278人 |
+| 2020年3月 | 28,042人 | +25,708人 |
+| 2020年4月 | 252,141人 | +224,099人 |
+| 2020年5月 | 462,726人 | +210,585人 |
+
+
 
 ## まとめ
 
 Snowflake Intelligence が使えないリージョンでも、Cortex Analyst とClaude Code を組み合わせることで、自然言語によるデータ分析が完結する体験を作れました。
-Cortex Search などの他のツールへのルーティングもできそうな気がします。
-本取組みは、Snowflake内のデータをClaudeに見せている点ではSnowflake Intelligence と変わらないため、**本質的な解決にはなっていません**。社内のセキュリティ基準に従ってください。
-このような環境をセキュアに実現できる**Intelligenceは神**。早く日本リージョン対応してくださいお願いします
+今回はAlalyst のみをルーティングさせましたが、Claude部分を工夫すれば、Cortex Search などの他のツールへのルーティングもできそうな気がします。
+本取組みは、Snowflake内のデータをClaudeに見せている点ではSnowflake Intelligence と変わらないため、**Snowflake Intelligenceの日本リージョンに閉じた代替ができているとは言えません**。社内のセキュリティ基準に従ってください。
+このような環境をネイティブかつセキュアに実現できる**Intelligenceは神**。早く日本に来て・・・
