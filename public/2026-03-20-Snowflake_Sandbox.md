@@ -6,8 +6,8 @@ tags:
   - SnowflakeIntelligence
   - CortexAnalyst
 private: false
-updated_at: '2026-03-22T19:18:15+09:00'
-id: null
+updated_at: '2026-03-23T10:04:52+09:00'
+id: ca1dcb64552fc3af8298
 organization_url_name: null
 slide: false
 ignorePublish: false
@@ -45,9 +45,9 @@ Snowflake Intelligence は、自然言語でデータ分析ができるエージ
 
 ```mermaid
 flowchart TD
-    A[ユーザー質問] --> B[Claude Code\nオーケストレーター]
+    A[ユーザー質問] --> B[Claude Code]
     B -->|Bash ツール経由| C[cortex_analyst.py]
-    C -->|REST API POST| D[Cortex Analyst\nSnowflake 独自 LLM]
+    C -->|REST API POST| D[Cortex Analyst]
     D -->|SQL 生成| E[Snowflake 実行]
     E -->|JSON 結果| C
     C -->|結果を返す| B
@@ -78,7 +78,7 @@ python3 -m venv venv
 venv/bin/pip install snowflake-connector-python python-dotenv
 ```
 
-### 2. Cortex Analyst CLI スクリプト（`scripts/cortex_analyst.py`）
+### 2. Cortex Analyst CLI スクリプト抜粋（`scripts/cortex_analyst.py`）
 
 
 ```python
@@ -194,11 +194,6 @@ CREATE OR REPLACE SEMANTIC VIEW CORTEX_DB.SEMANTIC_MODELS.COVID19_SEMANTIC
   );
 ```
 
-Semantic View の指定
-
-```python
-"semantic_view": "CORTEX_DB.SEMANTIC_MODELS.COVID19_SEMANTIC"
-```
 
 ### 4. Claude Code カスタムコマンド（`/analyst`）
 
