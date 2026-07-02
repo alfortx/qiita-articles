@@ -1,11 +1,11 @@
 ---
-title: Snowflakeビューの参照元テーブルの権限
+title: Snowflakeビューの参照元テーブルに権限は必要か？
 tags:
   - SQL
   - RBAC
   - Snowflake
 private: false
-updated_at: '2026-07-02T21:26:15+09:00'
+updated_at: '2026-07-02T21:38:58+09:00'
 id: 6fafc0f0aa317b58df29
 organization_url_name: null
 slide: false
