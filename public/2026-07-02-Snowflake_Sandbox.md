@@ -1,15 +1,17 @@
 ---
-title: 'Snowflakeのビューは参照先テーブルの権限がなくてもSELECTできる――所有者権限モデルを手を動かして確かめた'
+title: Snowflakeビューの参照元テーブルの権限
 tags:
-  - Snowflake
   - SQL
   - RBAC
+  - Snowflake
 private: false
-updated_at: ''
-id: null
+updated_at: '2026-07-02T21:26:15+09:00'
+id: 6fafc0f0aa317b58df29
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR
@@ -198,8 +200,15 @@ USE ROLE VIEW_CONSUMER;
 
 ## まとめ
 
-Snowflake のビューは **所有者権限モデル**で動作する。要点は3つ。
+Snowflake のビューは **所有者権限モデル**で動作する。
 
 **ビューにSELECT権限があれば、参照先テーブルへの権限がなくてもクエリは成功する**
 
 「テーブルを隠してビューだけ公開する」という設計は Snowflake では正しく機能する。
+
+Snowflakeではビューの所有者＝作成者であり、「作成時にビューの処理が成功する必要がある＝所有者に参照先テーブルの権限がある」が成り立つため、この仕様は自然。
+逆に、ビューの所有権を別のロールに移したりしたら事故が起きそう。
+
+「オブジェクトの所有権は作成者が持つ」の原理を守ることの大切さを学んだ。
+
+なお、対象のビューがアカウント間のデータシェア対象であった場合、別の権限が必要（実務ではここでこけた）。この件はまた記事にしたいです。
