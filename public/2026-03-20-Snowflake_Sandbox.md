@@ -6,11 +6,13 @@ tags:
   - SnowflakeIntelligence
   - CortexAnalyst
 private: false
-updated_at: '2026-03-23T10:04:52+09:00'
+updated_at: '2026-03-23T10:18:58+09:00'
 id: ca1dcb64552fc3af8298
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR

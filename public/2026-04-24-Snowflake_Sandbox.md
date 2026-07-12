@@ -1,17 +1,19 @@
 ---
-title: 'Snowflake Cortex Search Service で企業名の表記揺れを名寄せする方法・おかわり'
+title: Snowflake Cortex Search Service で企業名の表記揺れを名寄せする方法・おかわり
 tags:
-  - Snowflake
-  - CortexSearch
   - 自然言語処理
-  - データエンジニアリング
   - 名寄せ
+  - Snowflake
+  - データエンジニアリング
+  - CortexSearch
 private: false
-updated_at: ''
-id: null
+updated_at: '2026-04-24T21:07:48+09:00'
+id: 13f36b19e160c1128fde
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR

@@ -1,16 +1,18 @@
 ---
-title: 'Row Access Policyを試してみた'
+title: Row Access Policyを試してみた
 tags:
-  - Snowflake
-  - セキュリティ
   - SQL
+  - Security
+  - Snowflake
   - データ基盤
 private: false
-updated_at: ''
-id: null
+updated_at: '2026-06-19T13:13:34+09:00'
+id: 6a97dd2d09da5a40dc8e
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR

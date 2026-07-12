@@ -5,7 +5,7 @@ tags:
   - RBAC
   - Snowflake
 private: false
-updated_at: '2026-07-02T21:38:58+09:00'
+updated_at: '2026-07-02T21:41:15+09:00'
 id: 6fafc0f0aa317b58df29
 organization_url_name: null
 slide: false

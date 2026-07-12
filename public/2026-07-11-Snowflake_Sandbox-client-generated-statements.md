@@ -1,16 +1,18 @@
 ---
-title: 'Snowsightにログインしただけでウェアハウスが起動する件を調べた'
+title: Snowsightにログインしただけでウェアハウスが起動する件を調べた
 tags:
-  - Snowflake
-  - ウェアハウス
   - コスト
+  - Snowflake
   - Snowsight
+  - ウェアハウス
 private: false
-updated_at: ''
-id: null
+updated_at: '2026-07-12T20:08:32+09:00'
+id: 17ab5a97bd1571532e0c
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR

@@ -1,16 +1,18 @@
 ---
-title: 'Snowflake 自腹有料アカウントの財布防衛記録 ― ウェアハウスコスト設定に向き合ってみた'
+title: Snowflake 自腹有料アカウントの財布防衛記録 ― ウェアハウスコスト設定に向き合ってみた
 tags:
-  - Snowflake
-  - コスト
-  - ウェアハウス
   - SQL
+  - コスト
+  - Snowflake
+  - ウェアハウス
 private: false
-updated_at: ''
-id: null
+updated_at: '2026-07-04T11:24:37+09:00'
+id: d4e16fbb560c45780550
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR
@@ -25,7 +27,8 @@ ignorePublish: false
 
 個人学習をトライアルアカウントで行ってきたが、最近 AI 機能が有料化されたことで、有料アカウントへ契約をした。もちろん自腹。コスト意識が高まり、コストを抑える仕組みを調査してみた。
 
-![クレジット使用状況](./snowflake-credit-usage.png)
+[クレジット使用状況]![スクリーンショット 2026-07-04 11.22.44.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/4076823/1ba331b3-9c88-44ac-ae33-8b836780cd92.png
+)
 
 大した消費ではない。しかし日々のコーヒー代の足しにできるお金が流れていると思うと。。。
 
