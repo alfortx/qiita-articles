@@ -1,5 +1,5 @@
 ---
-title: Snowsightにログインしただけでウェアハウスが起動する件を調べた
+title: 身に覚えのないウェアハウス起動について調べた
 tags:
   - コスト
   - Snowflake
@@ -17,7 +17,7 @@ agreed_posting_campaign_term: false
 
 ## TL;DR
 
-- Snowsight にログインしただけでウェアハウスが起動することがある
+- Snowsight にログインしただけでウェアハウスが起動することがある。これはSnowsightの画面遷移時にシステムが自動発行するクエリで仕様上不可避のよう
 - クエリ履歴を見てもヒットしないのは「Client-generated statements（クライアント生成ステートメント）」がデフォルトのフィルターから除外されているため
 - `Monitoring » Query History` のフィルターで `Client-generated statements` を有効にすると確認できる
 
