@@ -7,11 +7,13 @@ tags:
   - Gmail
   - Claude
 private: true
-updated_at: ''
-id: null
+updated_at: '2026-07-29T15:01:49+09:00'
+id: 734ee24a5cd1c203b835
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR
