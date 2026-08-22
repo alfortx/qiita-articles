@@ -6,8 +6,8 @@ tags:
   - coco
   - CortexCode
   - SIS
-private: true
-updated_at: '2026-08-22T16:00:53+09:00'
+private: false
+updated_at: '2026-08-22T16:04:26+09:00'
 id: 71ed5b6a1fe8d93eca6a
 organization_url_name: null
 slide: false
@@ -25,7 +25,6 @@ agreed_posting_campaign_term: false
 ## 環境
 
 - Snowflake（有償アカウント、Standard Edition）
-- Snowflake CLI（`snow`）3.16.0
 
 ## 背景・課題
 
