@@ -1,17 +1,19 @@
 ---
-title: 'Streamlit in Snowflake(SiS) をCoCoで開発するために必要なこと'
+title: Streamlit in Snowflake(SiS) をCoCoで開発するために必要なこと
 tags:
   - Snowflake
   - Streamlit
-  - CoCO
+  - coco
   - CortexCode
-  - SiS
+  - SIS
 private: true
-updated_at: ''
-id: null
+updated_at: '2026-08-22T16:00:53+09:00'
+id: 71ed5b6a1fe8d93eca6a
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR
@@ -37,7 +39,7 @@ SiS には「ワークスペース方式」と「ステージ方式」の2つの
 | 対応ランタイム | container のみ | container / warehouse 両方 |
 
 
-CoCo in Snowsight は、ワークスペース内のファイルしか読めず、ステージ上のファイルは編集対象外です。つまり、CoCo で Streamlit アプリを自然言語で開発したいなら、ワークスペース方式一択になります。
+CoCo in Snowsight は、ワークスペース内のファイルしか読めず、ステージ上のファイルは編集対象外です。つまり、CoCo で Streamlit アプリを自然言語で開発したいなら、**ワークスペース方式一択になります**。
 
 そしてワークスペース方式は**container ランタイム専用**となるため、軽量な warehouse ランタイムは選べません。開発中も含めて**コンピュートプールが必須**になります
 
@@ -142,12 +144,12 @@ GRANT ROLE SISWS_VIEWER_ROLE TO USER <ログイン中ユーザー名>;
 ### 2. ワークスペースでアプリを作成
 
 Snowsight で `SISWS_OWNER_ROLE` に切り替え、ワークスペースを開いて **+ Add new » Streamlit app** を選択すると、アプリ名の入力とコンピュートを先ほと作成したものを選択します
-![alt text](image-1.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-1.png)
 「ネットワーク」で外部アクセス統合を選択します
-![alt text](image-3.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-3.png)
 
 自分のワークスペースに、`streamlit_app.py` / `pyproject.toml` / `snowflake.yml` / `.streamlit/config.toml` の4ファイルが自動生成されます。
-![alt text](image-2.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-2.png)
 このファイルはダッシュボードのソースコードであり、ワークスペースにあるため**CoCoから編集可能です**。
 
 
@@ -156,15 +158,15 @@ Snowsight で `SISWS_OWNER_ROLE` に切り替え、ワークスペースを開�
 ### 3. Run → Deploy
 
 アプリコードが編集できたら、**Run(実行)**で自分だけが見える開発アプリとして起動できます。
-![alt text](image-4.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-4.png)
 
 **Deploy(展開)** を押すと、App title / Location / Execution（compute pool・warehouse）/ Network（EAI）/ Sharing（USAGE 付与ロール）の5項目を確認するダイアログが出ます。
 開発状態との違いはスキーマを指定することです。ここからも分かる通り、デプロイするとスキーマオブジェクトとして配置され他の人からも見えるようになります
-![alt text](image-5.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-5.png)
 ネットワークタブで、開発状態と同じく外部アクセス統合を有効化
-![alt text](image-6.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-6.png)
 共有タブで、ダッシュボード共有先のロールを選択できるようです
-![alt text](image-7.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-7.png)
 
 
 
@@ -183,7 +185,7 @@ SELECT * FROM SISWS_DB.DATA.JHU_TIMESERIES LIMIT 1;
 ```
 
 一方、Snowsight で VIEWER ロールに切り替えてアプリを開くと、全チャートが正常に表示され、OWNER権限でデータにアクセスできていることがわかります！
-![alt text](image-8.png)
+![alt text](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/image-8.png)
 
 ### 5. クリーンナップ
 
