@@ -1,16 +1,18 @@
 ---
-title: '【Snowflake】Data Movement Policyがビューに効く条件を調べてみた'
+title: 【Snowflake】Data Movement Policyがビューに効く条件を調べてみた
 tags:
   - Snowflake
   - DataMovementPolicy
   - DMP
-  - TAG
-private: true
-updated_at: ''
-id: null
+  - tag
+private: false
+updated_at: '2026-08-29T17:53:03+09:00'
+id: ecb717e5374a5fae8825
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR
