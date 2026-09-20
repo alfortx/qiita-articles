@@ -1,15 +1,17 @@
 ---
-title: '【Snowflake】共有ワークスペースが裏側で何をしているのか調べてみた'
+title: 【Snowflake】共有ワークスペースが裏側で何をしているのか調べてみた
 tags:
   - Snowflake
   - Snowsight
   - ワークスペース
 private: true
-updated_at: ''
-id: null
+updated_at: '2026-09-20T18:15:56+09:00'
+id: c652ff825e60da7f975a
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR
@@ -51,7 +53,7 @@ Snowsight の共有ワークスペースで SQL ファイルを編集してい�
 
 まず Snowsight 側だけで、ファイルを作って公開するまでを追ってみます。
 
-観察していると、**ボタンの状態が今どの段階にいるかを教えてくれる**ことが分かりました。
+右上のボタンの動きに注目してください。
 
 | 状態 | 右上のボタン | `Discard changes` | ファイル名の横の青い点 |
 |---|---|---|---|
@@ -66,11 +68,11 @@ Snowsight の共有ワークスペースで SQL ファイルを編集してい�
 
 **2つ目は、`Discard changes` の有効／無効が「戻す先があるか」を示していること。** 一度も公開していないファイルには戻す先の公開版が存在しないので、①②では押せません。
 
-![ファイル新規作成直後は Discard changes が無効](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-publish-new-file.png)
+![ファイル新規作成直後は Discard changes が無効](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-publish-new-file-annotated.png)
 
 ③で初めて公開版ができ、④でそこからの差分が生まれて、ようやく `Discard changes` が有効になります。
 
-![公開後に編集すると Discard changes が有効になる](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-publish-after-edit.png)
+![公開後に編集すると Discard changes が有効になる](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-publish-after-edit-annotated.png)
 
 ファイル名の横の青い点は「未公開の変更がある」印です。公開すると消えます。
 
@@ -80,11 +82,11 @@ Snowsight の共有ワークスペースで SQL ファイルを編集してい�
 
 `Published` タブには公開済みの版が並びます。版を選んで `Restore this version` を押せば、過去の状態に戻せます。
 
-![Version history の Published タブ](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-version-history-published.png)
+![Version history の Published タブ](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-version-history-published-annotated.png)
 
 `My drafts` タブには、まだ公開していない下書きが入っています。未公開の状態にも日時が記録されているのが分かります。
 
-![Version history の My drafts タブ](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-version-history-drafts.png)
+![Version history の My drafts タブ](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-version-history-drafts-annotated.png)
 
 ここまでで、ワークスペースが**「公開済み」と「下書き」の2階層**を持っていることが見えてきました。タブ名が `My drafts`（＝私の下書き）であることから、下書きがユーザー単位で管理されていることを示しています。
 
@@ -206,7 +208,7 @@ UI が版をファイル単位でしか表示しないため、ファイルご�
 099108 (22000): Live version is not found.
 ```
 
-一方、Snowsight から公開した場合は、サーバー側が次の下書きを用意してくれます。UI に `ADD LIVE VERSION` に相当する操作が存在しないのはそのためです。
+一方、Snowsight から公開した場合は、サーバー側が次の下書きを用意してくれてるようです。UI に `ADD LIVE VERSION` に相当する操作が存在しないのはそのためです。
 
 | クライアント | 公開後の下書き | `ADD LIVE VERSION` |
 |---|---|---|
@@ -237,11 +239,11 @@ ALTER WORKSPACE <WS> COMMIT;                      -- 公開する
 
 ちなみに、SQL と UI は同じ状態を見ています。Snowsight を開いたまま SQL で `PUT` すると、ファイル名の横に青い点が現れます。
 
-![SQL の PUT 後に UI で未公開の印が付く](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-sql-put-dot.png)
+![SQL の PUT 後に UI で未公開の印が付く](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-sql-put-dot-annotated.png)
 
 `COMMIT` すれば、その点が消えます。
 
-![SQL の COMMIT 後に UI の印が消える](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-sql-commit-nodot.png)
+![SQL の COMMIT 後に UI の印が消える](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/ws-sql-commit-nodot-annotated.png)
 
 Snowsight を一切触らずに SQL だけで操作しても、UI の表示は同じでした。入り口が違うだけで両者は同じものを見ていると言うことです。
 
