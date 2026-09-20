@@ -4,8 +4,8 @@ tags:
   - Snowflake
   - Snowsight
   - ワークスペース
-private: true
-updated_at: '2026-09-20T18:15:56+09:00'
+private: false
+updated_at: '2026-09-20T18:18:29+09:00'
 id: c652ff825e60da7f975a
 organization_url_name: null
 slide: false
