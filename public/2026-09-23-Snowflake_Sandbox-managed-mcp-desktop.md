@@ -5,8 +5,8 @@ tags:
   - MCP
   - cortex
   - Claude
-private: true
-updated_at: '2026-09-25T13:13:36+09:00'
+private: false
+updated_at: '2026-09-25T13:17:50+09:00'
 id: 57bc30519fa6c69ae21d
 organization_url_name: null
 slide: false
