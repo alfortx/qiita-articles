@@ -6,7 +6,7 @@ tags:
   - cortex
   - Claude
 private: true
-updated_at: '2026-09-25T12:55:58+09:00'
+updated_at: '2026-09-25T13:13:36+09:00'
 id: 57bc30519fa6c69ae21d
 organization_url_name: null
 slide: false
@@ -215,7 +215,7 @@ Claude Desktop・claude.ai のコネクタは、手元の PC からではなく 
 
 同じ IP addresses のページには `160.79.104.0/23` も載っていますが、こちらは **Inbound**（Anthropic の API が受ける側）です。ネットワークポリシーで許可するのは `/21` のほうなので、取り違えないよう注意してください。
 
-レンジ内かどうかは `PARSE_IP` で判定できます（仕組みは後述のコラムで説明します）。
+レンジ内かどうかは `PARSE_IP` で判定できます（仕組みは下の補足で説明します）。
 
 ```sql
 SELECT CLIENT_IP,
@@ -240,8 +240,8 @@ ORDER BY 3 DESC;
 
 OAuth トークンでのアクセスが `True` になっていれば、Claude からのリクエストは Snowflake まで届いています。ネットワークポリシーやファイアウォールを疑う必要はありません。逆に `LOGIN_HISTORY` に何も残っていなければ、手前で遮断されている可能性が高いです。
 
-:::note info
-**コラム：PARSE_IP で IP アドレスを数値として比較する**
+:::note warn
+**補足：PARSE_IP で IP アドレスを数値として比較する**
 
 `PARSE_IP` は、IP アドレスや CIDR の文字列を分解して OBJECT で返す関数です。単一の IP と CIDR を渡すと、それぞれ次のように返ります（主要なフィールドのみ抜粋）。
 
@@ -323,7 +323,7 @@ Snowflake のことには触れず、普通の質問として投げてみます�
 
 「日本のコロナウイルスの感染者数の推移をグラフにして」と聞くと、Claude は質問の内容から Snowflake コネクタの Agent を使うと判断し、ツール実行の許可を求めてきます。
 
-![Claude が Snowflake の Agent を使うための許可を求める画面](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/mcp-desktop-agent-approval.png)
+![Claude が Snowflake の Agent を使うための許可を求める画面](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/mcp-desktop-agent-approval-annotated.png)
 
 ここで分かることは3つです。
 
