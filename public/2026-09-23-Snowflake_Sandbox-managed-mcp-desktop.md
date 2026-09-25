@@ -1,16 +1,18 @@
 ---
-title: '【Snowflake】MCP Server で Claude Desktop からアクセスする経路を作るまでの試行錯誤'
+title: 【Snowflake】MCP Server で Claude Desktop からアクセスする経路を作るまでの試行錯誤
 tags:
   - Snowflake
   - MCP
-  - Cortex
+  - cortex
   - Claude
 private: true
-updated_at: ''
-id: null
+updated_at: '2026-09-25T12:55:58+09:00'
+id: 57bc30519fa6c69ae21d
 organization_url_name: null
 slide: false
 ignorePublish: false
+posting_campaign_uuid: null
+agreed_posting_campaign_term: false
 ---
 
 ## TL;DR
@@ -203,7 +205,6 @@ Claude Desktop から接続すると、次のように2種類のログインが�
 
 `OAUTH_ACCESS_TOKEN` の行が `IS_SUCCESS = YES` で並んでいれば、通信も認証も問題ありません。
 
-ユーザー名を小文字で作っている場合、`USER_NAME => 'ANALYST_USER'` と大文字で書くと `User 'ANALYST_USER' does not exist or not authorized.` になります。
 
 ### ② 接続元 IP が Anthropic のレンジ内か確かめる
 
@@ -239,7 +240,8 @@ ORDER BY 3 DESC;
 
 OAuth トークンでのアクセスが `True` になっていれば、Claude からのリクエストは Snowflake まで届いています。ネットワークポリシーやファイアウォールを疑う必要はありません。逆に `LOGIN_HISTORY` に何も残っていなければ、手前で遮断されている可能性が高いです。
 
-### コラム：PARSE_IP で IP アドレスを数値として比較する
+:::note info
+**コラム：PARSE_IP で IP アドレスを数値として比較する**
 
 `PARSE_IP` は、IP アドレスや CIDR の文字列を分解して OBJECT で返す関数です。単一の IP と CIDR を渡すと、それぞれ次のように返ります（主要なフィールドのみ抜粋）。
 
@@ -257,8 +259,11 @@ CIDR: { "family": 4, "host": "160.79.104.0",   "ipv4": 2689558528,
 IPv4 は `ipv4` に**整数**で入り、CIDR を渡すと範囲の始点と終点も `ipv4_range_start` / `ipv4_range_end` に整数で入ります。そのため「IP の整数値が範囲の始点と終点の間にあるか」を `BETWEEN` で書くだけで、レンジ内かどうかを判定できます。文字列の前方一致（`LIKE '160.79.10%'` など）では `/21` のような境界を正しく扱えないので、こちらを使うのが確実です。
 
 IPv6 を渡すと、`ipv4` の代わりに `hex_ipv6`・`hex_ipv6_range_start`・`hex_ipv6_range_end` が16進文字列で返ります。IPv6 のレンジを判定したいときは、こちらを文字列として比較します。
+:::
 
 ### ③ QUERY_HISTORY でクエリ実行を見る
+
+実際にClaudeからAgentを呼べたら、Snowflake側でクエリが投げられているのを確認できます。 Agentが使用するユーザーで抽出します。
 
 ```sql
 SELECT START_TIME, ROLE_NAME, WAREHOUSE_NAME, EXECUTION_STATUS, ERROR_MESSAGE
@@ -269,22 +274,6 @@ WHERE USER_NAME = 'analyst_user'
 ORDER BY START_TIME;
 ```
 
-ここで2つ注意があります。
-
-**1つ目：接続しただけではクエリは記録されません。** コネクタを接続した直後（ツール一覧を取得しただけ）の時点では、`QUERY_HISTORY` は0件です。Claude に質問して Agent が呼ばれて、初めて記録されます。
-
-**2つ目：`QUERY_HISTORY_BY_USER` は小文字のユーザー名だとエラーにならずに0件を返します。**
-①の`LOGIN_HISTORY_BY_USER` は `'analyst_user'` で取れるのに、`QUERY_HISTORY_BY_USER` は `'"analyst_user"'` とダブルクォートで囲まないとヒットしません。同じ条件で比べた結果です。
-
-```text
-| 取得方法                                           | 件数 |
-|----------------------------------------------------+------|
-| QUERY_HISTORY_BY_USER(USER_NAME=>'analyst_user')   | 0    |
-| QUERY_HISTORY_BY_USER(USER_NAME=>'"analyst_user"') | 6    |
-| QUERY_HISTORY() + WHERE USER_NAME='analyst_user'   | 6    |
-```
-
-エラーにならないので、「クエリが来ていない」と誤読しやすいです。上の SQL のように `QUERY_HISTORY()` を `WHERE` で絞るほうが確実です。
 
 ## ハマったポイント
 
@@ -328,7 +317,29 @@ models:
 
 ## 動作確認
 
-Claude Desktop で質問すると、Claude が `sales_agent` ツールを選んで呼び出します。③の `QUERY_HISTORY` で確認すると、Agent が生成した SQL が接続ユーザー・ロールで実行されていました。
+### Claude から質問する
+
+Snowflake のことには触れず、普通の質問として投げてみます。実機では、検証用にサンプルで構築した Agent（公開データを集計するもの）を MCP Server に公開しています。
+
+「日本のコロナウイルスの感染者数の推移をグラフにして」と聞くと、Claude は質問の内容から Snowflake コネクタの Agent を使うと判断し、ツール実行の許可を求めてきます。
+
+![Claude が Snowflake の Agent を使うための許可を求める画面](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/mcp-desktop-agent-approval.png)
+
+ここで分かることは3つです。
+
+- **ツールは Claude が自動で選ぶ**：プロンプトに「Snowflake」や Agent 名を書かなくても、MCP Server に登録した `title` と `description` から、使うツールを判断しています。手順2で `description` に守備範囲を書いておく意味は、ここにあります
+- **Agent への質問は Claude が組み立て直す**：Agent に渡す `Text` は、元の質問そのままではありません。「月ごとに合計」「全期間」「対象期間も返す」など、グラフを作るのに必要な条件が補われています
+- **実行前に許可を求められる**：「1回だけ許可する」「常に許可する」を選べます。分析用の窓口として毎回使うなら、「常に許可する」にしておくと手間が減ります
+
+許可すると Agent が集計結果を返し、Claude がそれをグラフにしてくれます。
+
+![Agent の集計結果を Claude がグラフにした画面](https://raw.githubusercontent.com/alfortx/qiita-articles/main/public/mcp-desktop-agent-result.png)
+
+集計は Snowflake 側の Agent が行い、グラフの描画は Claude 側が行っています。データの取り出し方は Snowflake のセマンティックレイヤーで統制したまま、見せ方は AI クライアントに任せられる、という分担です。
+
+### Snowflake 側で実行を確認する
+
+③の `QUERY_HISTORY` で確認すると、Agent が生成した SQL が接続ユーザー・ロールで実行されていました。
 
 ```text
 | START_TIME                    | USER_NAME    | ROLE_NAME    | WAREHOUSE_NAME | EXECUTION_STATUS  |
