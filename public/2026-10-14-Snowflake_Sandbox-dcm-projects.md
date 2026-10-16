@@ -1,12 +1,12 @@
 ---
-title: '【Snowflake】DCM Projects をCLIとSnowsightから色々いじってみた'
+title: '【Snowflake】DCM Projects を CLI と Snowsight から色々いじってみた'
 tags:
   - Snowflake
   - DCMProjects
   - Snowsight
   - IaC
-private: true
-updated_at: '2026-10-16T17:50:04+09:00'
+private: false
+updated_at: '2026-10-16T17:51:03+09:00'
 id: 256e6ce9f129a57b2c9a
 organization_url_name: null
 slide: false
