@@ -1,12 +1,12 @@
 ---
-title: '【Snowflake】DCM Projects をCLIとSnowsightの両方で動かしてみた'
+title: '【Snowflake】DCM Projects をCLIとSnowsightから色々いじってみた'
 tags:
   - Snowflake
   - DCMProjects
   - Snowsight
   - IaC
 private: true
-updated_at: '2026-10-16T17:17:53+09:00'
+updated_at: '2026-10-16T17:50:04+09:00'
 id: 256e6ce9f129a57b2c9a
 organization_url_name: null
 slide: false
@@ -15,8 +15,8 @@ ignorePublish: false
 
 ## TL;DR
 
-- Snowflake の **DCM Projects** を、 **CLI（SQL）と Snowsight（Git ワークスペース）の両方** から PLAN / DEPLOY しました
-- どちらの方法でも、ログや状態の管理がSnowsightで行えるのが便利です
+- Snowflake の **DCM Projects** を、 **CLI（SQL）と Snowsight（Git ワークスペース）の両方** から PLAN / DEPLOY し、Snowsight上で挙動を確認しました。
+- どちらの方法でも、ログや状態の管理がSnowsightで綺麗に表示できるのが便利です
 
 ## 環境
 
