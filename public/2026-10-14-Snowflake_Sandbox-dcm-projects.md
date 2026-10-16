@@ -6,8 +6,8 @@ tags:
   - Snowsight
   - IaC
 private: true
-updated_at: ''
-id: null
+updated_at: '2026-10-16T17:17:53+09:00'
+id: 256e6ce9f129a57b2c9a
 organization_url_name: null
 slide: false
 ignorePublish: false
@@ -15,9 +15,8 @@ ignorePublish: false
 
 ## TL;DR
 
-- Snowflake の **DCM Projects** を、同じ定義ファイルのまま **CLI（SQL）と Snowsight（Git ワークスペース）の両方** から PLAN / DEPLOY しました
-- **CLI** は `EXECUTE IMMEDIATE FROM ...` のコマンド で実行でき、スクリプト化しやすいので **CI 向き** です
-- **Snowsight** はレンダリング結果・系列（依存関係）・デプロイ履歴を GUI で確認でき、**開発中の確認** です
+- Snowflake の **DCM Projects** を、 **CLI（SQL）と Snowsight（Git ワークスペース）の両方** から PLAN / DEPLOY しました
+- どちらの方法でも、ログや状態の管理がSnowsightで行えるのが便利です
 
 ## 環境
 
